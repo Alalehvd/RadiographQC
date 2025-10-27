@@ -42,3 +42,8 @@ tmp/
 *.tar
 *.gz
 *.7z.env311/
+.env311/
+data/
+models/
+.streamlit/
+.cache/
