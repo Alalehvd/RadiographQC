@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 
 # Import utils path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent.parent   # repo root (since app/ is one level down)
+MODEL_DIR = ROOT / "models"
 
 # Optional DICOM
 try:
@@ -48,12 +51,16 @@ def read_image_any_bytes(name: str, byts: bytes) -> np.ndarray:
     pil = Image.open(io.BytesIO(byts)).convert("L")
     return np.array(pil, dtype=np.uint8)
 
-def _load_bundle(path: str):
-    if not os.path.exists(path):
-        return None
+def _load_bundle(name: str):
+    p = (MODEL_DIR / name)
     try:
-        return joblib.load(path)
-    except Exception:
+        if not p.exists():
+            st.sidebar.warning(f"Model file not found: {p}")
+            return None
+        bundle = joblib.load(p)
+        return bundle
+    except Exception as e:
+        st.sidebar.error(f"Failed to load {name}: {type(e).__name__}: {e}")
         return None
 
 # ---------- Features / prediction ----------
@@ -187,8 +194,8 @@ st.caption("EI/DI shown here are relative intensity metrics estimated from the i
            "They are not the true detector Exposure Index or Deviation Index.")
 
 st.sidebar.header("Models & Target")
-exp_bundle  = _load_bundle("models/exposure_bundle.joblib")
-qual_bundle = _load_bundle("models/quality_bundle.joblib")
+exp_bundle  = _load_bundle("exposure_bundle.joblib")
+qual_bundle = _load_bundle("quality_bundle.joblib")
 st.sidebar.write("Exposure model:", "✅ found" if exp_bundle else "⚠️ not found")
 st.sidebar.write("Quality model:",  "✅ found" if qual_bundle else "⚠️ not found")
 
