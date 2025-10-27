@@ -1,0 +1,44 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+env/
+.venv/
+.env/
+venv/
+*.log
+.env311
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+
+# --- Streamlit cache ---
+.streamlit/
+.cache/
+
+# --- Data & models ---
+data/
+models/
+*.csv
+*.xlsx
+*.npy
+*.npz
+*.pkl
+*.joblib
+*.h5
+
+# --- Temporary files ---
+tmp/
+*.out
+*.bak
+*.zip
+*.tar
+*.gz
+*.7z.env311/
