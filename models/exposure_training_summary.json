@@ -1,0 +1,12 @@
+{
+  "model": "xgboost",
+  "random_state": 42,
+  "n_splits": 5,
+  "best_auc_cv": 0.6156084656084656,
+  "cv_auc_mean": 0.6787619047619048,
+  "cv_auc_sd": 0.08270941949114596,
+  "cv_f1_mean": 0.8271642764364149,
+  "cv_f1_sd": 0.015374769838830866,
+  "recomputed_from_images": false,
+  "extra_cols": []
+}
