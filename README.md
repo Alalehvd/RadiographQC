@@ -5,7 +5,7 @@ It provides automatic exposure assessment, quality scoring, and visual analysis 
 
 ⸻
 
-Overview
+**Overview**
 
 The goal of this prototype is to explore automated quality control in veterinary radiology.
 It estimates exposure, evaluates positioning, sharpness, and collimation,
@@ -13,7 +13,7 @@ and visualizes image features to help clinicians understand the technical consis
 
 ⸻
 
-Dataset
+**Dataset**
 
 The models were trained on a subset of the
 **[Mendeley Thoracic Radiograph Dataset](https://data.mendeley.com/datasets/ktx4cj55pn/1)**  
@@ -32,18 +32,18 @@ This framework is intended for research purposes only.
 
 ⸻
 
-Notes
+**Notes**
 
-	•	**The framework shows strong potential for automated QC integration into veterinary imaging workflows.**
+**The framework shows strong potential for automated QC integration into veterinary imaging workflows.**
 	
-	•	Models were trained on a very small public dataset composed mostly of good-quality radiographs with few technical errors,
+Models were trained on a very small public dataset composed mostly of good quality radiographs with few technical errors,
 as the images were originally intended for educational use.
 
 ⚠️ As a result, model performance may vary when applied to more diverse clinical data.
 
 ⸻
 
-Author
+**Author**
 
 Alaleh Vazifehdoost, DVM
 
