@@ -10,6 +10,7 @@ from PIL import Image
 import cv2
 import joblib
 import matplotlib.pyplot as plt
+import glob
 
 # Import utils path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -37,11 +38,11 @@ CRITERION_COLS = {"positioning", "exposure", "collimation", "sharpness"}
 
 EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
 
-st.markdown("### 📂 Upload your radiographs or use examples")
+st.markdown("### 📂 Upload your radiographs or use example images")
 
 mode = st.radio(
     "Select input source:",
-    ["Upload my own files", "Use built-in example radiographs"],
+    ["Upload my own files", "Use example radiographs"],
     horizontal=True
 )
 
@@ -62,9 +63,9 @@ else:
         for path in example_paths:
             with open(path, "rb") as f:
                 files.append(
-                    type("FakeUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
+                    type("ExampleUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
                 )
-
+                
 # ---------- I/O ----------
 def read_image_any_bytes(name: str, byts: bytes) -> np.ndarray:
     ext = os.path.splitext(name)[1].lower()
