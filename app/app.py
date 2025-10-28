@@ -234,16 +234,11 @@ example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
 files = []
 
 if example_paths:
-    st.info(f"{len(example_paths)} example radiographs loaded automatically from 'app/examples/'.")
+    st.info(f"{len(example_paths)} example radiographs loaded automatically.'.")
     for p in example_paths:
         files.append(_fake_upload_from_path(p))
 else:
     st.warning("No example images found in `app/examples/`. Add a few PNG files for the demo.")
-
-st.caption(
-    "These are example small-animal thoracic radiographs analyzed automatically at startup. "
-    "You can also upload your own images below."
-)
 
 st.caption(
     "These are sample small-animal thoracic radiographs included for demonstration. "
