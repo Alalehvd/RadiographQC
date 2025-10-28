@@ -189,8 +189,13 @@ def fig_regional(img_uint8: np.ndarray):
 st.set_page_config(page_title="Radiograph QC — Upload & Predict", layout="wide")
 st.title("Radiograph QC - Upload & Predict")
 st.caption("Prototype sample developed for research discussions with **Dr. Ryan Appleby**.")
-st.caption("Upload PNG/JPG.")
-st.caption("EI/DI shown here are relative intensity metrics estimated from the image itself. "
+st.caption(
+    "This prototype is designed for **small animal thoracic radiographs** "
+    "(dogs and cats, lateral and ventrodorsal views). "
+    "For best results, upload images with the entire thorax visible, "
+    "minimal post-processing, and standard exposure technique. "
+    "Supports PNG, JPG formats."
+)st.caption("EI/DI shown here are relative intensity metrics estimated from the image itself. "
            "They are not the true detector Exposure Index or Deviation Index.")
 
 st.sidebar.header("Models & Target")
