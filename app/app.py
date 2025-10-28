@@ -454,8 +454,6 @@ st.download_button("⬇️ Download predictions CSV", data=csv, file_name="qc_pr
 st.caption("Note: EI/DI are proxies for PNGs.")
 st.info(
     "These visualizations and measurements are approximate. "
-    "The central region is treated for the lung field, "
-    "without anatomical segmentation. "
-    "Models were trained on a limited open-source dataset, so results "
-    "should be interpreted as indicative rather than diagnostic."
-)
+    "Models were trained on a small open-source dataset, so results "
+    "may not fully reflect clinical accuracy or generalize to all cases."
+))
