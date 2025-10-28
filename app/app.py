@@ -191,7 +191,7 @@ st.title("Radiograph QC - Upload & Predict")
 st.caption("Prototype sample developed for research discussions with **Dr. Ryan Appleby**.")
 st.caption(
     "This prototype is designed for **small animal thoracic radiographs** "
-    "(dogs and cats, lateral and ventrodorsal views). "
+    "(lateral views). "
     "For best results, upload images with the entire thorax visible, "
     "minimal post-processing, and standard exposure technique. "
     "Supports PNG, JPG formats."
