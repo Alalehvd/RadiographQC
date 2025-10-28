@@ -33,56 +33,6 @@ from utils.ei_di_features import (
 DATASET_CSV = os.path.join("data", "dataset.csv")
 SUPPORTED = (".png", ".jpg", ".jpeg", ".dcm")
 CRITERION_COLS = {"positioning", "exposure", "collimation", "sharpness"}
-
-# ---------- Examples ----------
-
-import os
-import glob
-from PIL import Image
-import streamlit as st
-
-# --- Load and show example images automatically ---
-EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
-example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
-
-files = []  # this will be passed into the rest of the app
-
-if example_paths:
-    st.markdown("### 🩻 Example Radiographs")
-    st.success(f"Loaded {len(example_paths)} example images from /app/examples/.")
-    
-    ex_cols = st.columns(min(len(example_paths), 3))
-    for col, path in zip(ex_cols, example_paths):
-        col.image(Image.open(path), caption=os.path.basename(path), use_container_width=True)
-        with open(path, "rb") as f:
-            # create a pseudo upload-like object so rest of app works normally
-            files.append(
-                type("ExampleUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
-            )
-
-    st.caption(
-        "These are built-in small-animal thoracic radiographs (PNG format) included for demonstration. "
-        "They are automatically used by the app below."
-    )
-
-else:
-    st.warning("No example images found in /app/examples/. Please add a few PNG files.")
-
-# --- Optional: let user add more images ---
-st.markdown("### 📂 Upload additional radiographs (optional)")
-upload_files = st.file_uploader(
-    "Upload PNG, JPG, or DICOM images",
-    type=["png", "jpg", "jpeg", "dcm"],
-    accept_multiple_files=True
-)
-
-if upload_files:
-    files.extend(upload_files)
-
-# --- Stop if nothing to process ---
-if not files:
-    st.info("Please add or use example images to begin.")
-    st.stop()
     
 # ---------- I/O ----------
 def read_image_any_bytes(name: str, byts: bytes) -> np.ndarray:
@@ -113,6 +63,7 @@ def _load_bundle(name: str):
     except Exception as e:
         st.sidebar.error(f"Failed to load {name}: {type(e).__name__}: {e}")
         return None
+
 
 # ---------- Features / prediction ----------
 def align_to_bundle_features(bundle, feats_df: pd.DataFrame) -> pd.DataFrame:
@@ -263,11 +214,56 @@ default_eit = compute_default_eit()
 EIT = st.sidebar.number_input("EIT (target, proxy)", value=float(default_eit), step=1.0, format="%.1f")
 st.sidebar.caption("Default = median EI_proxy of Good images.")
 
-files = st.file_uploader("Please upload one or more images",
-                         type=[e.strip(".") for e in SUPPORTED],
-                         accept_multiple_files=True)
+# --- Example-first input section (auto-runs analysis) ---
+import glob
+from PIL import Image
+
+EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
+
+def _fake_upload_from_path(path: str):
+    # Mimic an uploaded file object so the rest of the app works unchanged
+    with open(path, "rb") as f:
+        data = f.read()
+    return type("ExampleUpload", (), {
+        "name": os.path.basename(path),
+        "read": lambda d=data: d,
+    })()
+
+# 1️⃣ Load and display example images
+example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
+files = []
+
+st.markdown("### 🩻 Example Radiographs")
+if example_paths:
+    st.success(f"Loaded {len(example_paths)} example images. They are analyzed below automatically.")
+    cols = st.columns(min(3, len(example_paths)))
+    for i, p in enumerate(example_paths):
+        cols[i % len(cols)].image(Image.open(p), caption=os.path.basename(p), use_container_width=True)
+        files.append(_fake_upload_from_path(p))
+else:
+    st.warning("No example images found in `app/examples/`. Add a few PNG files for the demo.")
+
+st.caption(
+    "These are sample small-animal thoracic radiographs included for demonstration. "
+    "They are analyzed automatically below. You can also upload your own images."
+)
+
+st.markdown("---")
+
+# 2️⃣ Optional uploader (keeps only one uploader)
+st.markdown("### 📂 Upload additional radiographs (optional)")
+uploads = st.file_uploader(
+    "Upload PNG, JPG, or DICOM images",
+    type=["png", "jpg", "jpeg", "dcm"],
+    accept_multiple_files=True
+)
+if uploads:
+    files.extend(uploads)
+
+# 3️⃣ Stop if nothing found
 if not files:
-    st.info("Please upload images to begin."); st.stop()
+    st.info("Please add example images to `app/examples/` or upload your own to begin.")
+    st.stop()
 
 # # Defaults for criteria (applied to all uploads unless ML overwrites exposure)
 # st.sidebar.header("Default criteria (optional)")
