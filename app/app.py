@@ -38,34 +38,47 @@ CRITERION_COLS = {"positioning", "exposure", "collimation", "sharpness"}
 
 EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
 
-st.markdown("### 📂 Upload your radiographs or use example images")
+st.markdown("### 🩻 Example Radiographs")
 
-mode = st.radio(
-    "Select input source:",
-    ["Upload my own files", "Use example radiographs"],
-    horizontal=True
+example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
+example_files = []
+
+if example_paths:
+    st.success(f"Loaded {len(example_paths)} example images.")
+    ex_cols = st.columns(len(example_paths))
+    for col, path in zip(ex_cols, example_paths):
+        col.image(Image.open(path), caption=os.path.basename(path), use_container_width=True)
+        with open(path, "rb") as f:
+            example_files.append(
+                type("ExampleUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
+            )
+else:
+    st.warning("No example images found in /app/examples/. Please add a few PNG samples.")
+
+# Divider
+st.markdown("---")
+
+# Optional user uploads
+st.markdown("### 📂 Upload your own radiographs (optional)")
+st.caption("You can add PNG, JPG, or DICOM files to compare with the example images.")
+
+upload_files = st.file_uploader(
+    "Upload one or more images",
+    type=["png", "jpg", "jpeg", "dcm"],
+    accept_multiple_files=True
 )
 
-files = None
-if mode == "Upload my own files":
-    files = st.file_uploader(
-        "Upload one or more PNG, JPG, or DICOM images",
-        type=["png", "jpg", "jpeg", "dcm"],
-        accept_multiple_files=True
-    )
-else:
-    example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
-    if not example_paths:
-        st.error("No example images found in /app/examples/")
-    else:
-        st.success(f"Loaded {len(example_paths)} example images.")
-        files = []
-        for path in example_paths:
-            with open(path, "rb") as f:
-                files.append(
-                    type("ExampleUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
-                )
-                
+# Combine example + uploaded files
+files = []
+if example_files:
+    files.extend(example_files)
+if upload_files:
+    files.extend(upload_files)
+
+if not files:
+    st.info("Please upload or use the example images above to begin.")
+    st.stop()
+    
 # ---------- I/O ----------
 def read_image_any_bytes(name: str, byts: bytes) -> np.ndarray:
     ext = os.path.splitext(name)[1].lower()
