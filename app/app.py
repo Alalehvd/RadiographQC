@@ -214,43 +214,8 @@ default_eit = compute_default_eit()
 EIT = st.sidebar.number_input("EIT (target, proxy)", value=float(default_eit), step=1.0, format="%.1f")
 st.sidebar.caption("Default = median EI_proxy of Good images.")
 
-# # --- Example-first input section (auto-runs analysis) ---
-# import glob
-# from PIL import Image
 
-# EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
-
-# def _fake_upload_from_path(path: str):
-#     class ExampleUpload:
-#         def __init__(self, path):
-#             self.name = os.path.basename(path)
-#             self._data = open(path, "rb").read()
-#         def read(self):
-#             return self._data
-#     return ExampleUpload(path)
-    
-# st.markdown("---")
-
-# # Load and display example images
-# example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
-# files = []
-
-# if example_paths:
-#     st.info(f"{len(example_paths)} example radiographs loaded automatically.")
-#     for p in example_paths:
-#         files.append(_fake_upload_from_path(p))
-# else:
-#     st.warning("No example images found in `app/examples/`. Add a few PNG files for the demo.")
-
-# st.caption(
-#     "These are sample small-animal thoracic radiographs included for demonstration. "
-#     "They are analyzed automatically below. You can also upload your own images."
-# )
-
-# st.markdown("---")
-
-# --- Example + Upload input section with toggle ---
-import glob
+# --- Load examples or upload ---
 
 EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
 
@@ -271,22 +236,27 @@ use_examples = st.sidebar.checkbox(
 
 files = []
 
-# Optionally load example PNGs (silently, no preview grid)
+# Optionally load example PNGs
 if use_examples:
     example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
     if example_paths:
-        st.info(f"{len(example_paths)} example radiographs loaded from 'app/examples/'.")
+        st.info(f"{len(example_paths)} example radiographs loaded.")
         for p in example_paths:
             files.append(_fake_upload_from_path(p))
     else:
         st.warning("No example images found in `app/examples/`. Add a few PNGs for the demo.")
 
+st.caption(
+    "These are sample small-animal thoracic radiographs included for demonstration. "
+    "They are analyzed automatically below. You can also upload your own images."
+)
+
 st.markdown("---")
 
-# Uploader (always available)
-st.markdown("### 📂 Upload radiographs")
+# Uploader
+st.markdown("### 📂 Upload Radiographs")
 uploads = st.file_uploader(
-    "Upload PNG, JPG, or DICOM images",
+    "Upload PNG, JPG images",
     type=["png", "jpg", "jpeg", "dcm"],
     accept_multiple_files=True
 )
@@ -298,7 +268,7 @@ if not files:
     if use_examples:
         st.info("Add PNGs to `app/examples/` or upload images above to begin.")
     else:
-        st.info("Upload images above to begin (examples are hidden).")
+        st.info("Upload images above to begin.")
     st.stop()
 
 # # Optional uploader
