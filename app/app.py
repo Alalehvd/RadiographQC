@@ -36,47 +36,52 @@ CRITERION_COLS = {"positioning", "exposure", "collimation", "sharpness"}
 
 # ---------- Examples ----------
 
+import os
+import glob
+from PIL import Image
+import streamlit as st
+
+# --- Load and show example images automatically ---
 EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
-
-st.markdown("### 🩻 Example Radiographs")
-
 example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
-example_files = []
+
+files = []  # this will be passed into the rest of the app
 
 if example_paths:
-    st.success(f"Loaded {len(example_paths)} example images.")
-    ex_cols = st.columns(len(example_paths))
+    st.markdown("### 🩻 Example Radiographs")
+    st.success(f"Loaded {len(example_paths)} example images from /app/examples/.")
+    
+    ex_cols = st.columns(min(len(example_paths), 3))
     for col, path in zip(ex_cols, example_paths):
         col.image(Image.open(path), caption=os.path.basename(path), use_container_width=True)
         with open(path, "rb") as f:
-            example_files.append(
+            # create a pseudo upload-like object so rest of app works normally
+            files.append(
                 type("ExampleUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
             )
+
+    st.caption(
+        "These are built-in small-animal thoracic radiographs (PNG format) included for demonstration. "
+        "They are automatically used by the app below."
+    )
+
 else:
-    st.warning("No example images found in /app/examples/. Please add a few PNG samples.")
+    st.warning("No example images found in /app/examples/. Please add a few PNG files.")
 
-# Divider
-st.markdown("---")
-
-# Optional user uploads
-st.markdown("### 📂 Upload your own radiographs (optional)")
-st.caption("You can add PNG, JPG, or DICOM files to compare with the example images.")
-
+# --- Optional: let user add more images ---
+st.markdown("### 📂 Upload additional radiographs (optional)")
 upload_files = st.file_uploader(
-    "Upload one or more images",
+    "Upload PNG, JPG, or DICOM images",
     type=["png", "jpg", "jpeg", "dcm"],
     accept_multiple_files=True
 )
 
-# Combine example + uploaded files
-files = []
-if example_files:
-    files.extend(example_files)
 if upload_files:
     files.extend(upload_files)
 
+# --- Stop if nothing to process ---
 if not files:
-    st.info("Please upload or use the example images above to begin.")
+    st.info("Please add or use example images to begin.")
     st.stop()
     
 # ---------- I/O ----------
