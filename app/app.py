@@ -386,11 +386,11 @@ for upl in files:
             f"</div>", unsafe_allow_html=True
         )
 
-        with st.expander("Exposure curves (Histogram + CDF)", expanded=True):
+        with st.expander("Exposure Distribution Curves (Histogram + CDF)", expanded=True):
             st.pyplot(fig_exposure_curves(img, EIp, EIT), use_container_width=True)
-        with st.expander("Log-density histogram (tail visibility)", expanded=False):
+        with st.expander("Log-density histogram", expanded=False):
             st.pyplot(fig_log_hist(img), use_container_width=True)
-        with st.expander("Regional comparison (center vs borders)", expanded=False):
+        with st.expander("Center vs border brightness profile", expanded=False):
             st.pyplot(fig_regional(img), use_container_width=True)
 
     with R:
@@ -421,7 +421,7 @@ for upl in files:
             bullets.append(f"AI Exposure: **{'Good' if e_pred==1 else 'Poor'}** (p={e_prob:.2f}, thr={e_thr:.2f})")
         if qual_bundle:
             bullets.append(f"AI Final Quality: **{'Good' if q_pred==1 else 'Poor'}** (p={q_prob:.2f}, thr={q_thr:.2f})")
-        bullets.append(f"Criteria used: pos={crit_vals['positioning']}, exp={crit_vals['exposure']}, "
+        bullets.append(f"Criteria summary: pos={crit_vals['positioning']}, exp={crit_vals['exposure']}, "
                        f"col={crit_vals['collimation']}, shp={crit_vals['sharpness']}")
         st.markdown("- " + "\n- ".join(bullets))
 
