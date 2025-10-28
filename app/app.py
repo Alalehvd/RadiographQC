@@ -301,20 +301,20 @@ if not files:
         st.info("Upload images above to begin (examples are hidden).")
     st.stop()
 
-# Optional uploader
-st.markdown("### Upload Radiographs Here")
-uploads = st.file_uploader(
-    "Upload PNG, JPG, or DICOM images",
-    type=["png", "jpg", "jpeg", "dcm"],
-    accept_multiple_files=True
-)
-if uploads:
-    files.extend(uploads)
+# # Optional uploader
+# st.markdown("### Upload Radiographs Here")
+# uploads = st.file_uploader(
+#     "Upload PNG, JPG, or DICOM images",
+#     type=["png", "jpg", "jpeg", "dcm"],
+#     accept_multiple_files=True
+# )
+# if uploads:
+#     files.extend(uploads)
 
-# Stop if nothing found
-if not files:
-    st.info("Please add example images to `app/examples/` or upload your own to begin.")
-    st.stop()
+# # Stop if nothing found
+# if not files:
+#     st.info("Please add example images to `app/examples/` or upload your own to begin.")
+#     st.stop()
 
 # # Defaults for criteria (applied to all uploads unless ML overwrites exposure)
 # st.sidebar.header("Default criteria (optional)")
