@@ -243,10 +243,10 @@ if use_examples:
         st.info(f"{len(example_paths)} example radiographs loaded.")
         for p in example_paths:
             files.append(_fake_upload_from_path(p))
-    st.caption(
-        "These are sample small-animal thoracic radiographs included for demonstration. "
-        "They are analyzed automatically below. You can also upload your own images."
-    )
+        st.caption(
+            "These are sample small-animal thoracic radiographs included for demonstration. "
+            "They are analyzed automatically below. You can also upload your own images."
+        )
     else:
         st.warning("No example images found in `app/examples/`. Add a few PNGs for the demo.")
 
