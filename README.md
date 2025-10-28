@@ -20,8 +20,11 @@ The models were trained on a subset of the
 containing **small-animal thoracic X-rays (lateral views)**.
 
 Images were manually labeled for:
+
 	•	Exposure quality
+	
 	•	Positioning and collimation
+	
 	•	Overall image acceptability
 
 ⚠️ Due to limited sample size and lack of anatomical segmentation, results are approximate.
@@ -30,9 +33,12 @@ This framework is intended for research purposes only.
 ⸻
 
 Notes
+
 	•	**The framework shows strong potential for automated QC integration into veterinary imaging workflows.**
+	
 	•	Models were trained on a very small public dataset composed mostly of good-quality radiographs with few technical errors,
 as the images were originally intended for educational use.
+
 ⚠️ As a result, model performance may vary when applied to more diverse clinical data.
 
 ⸻
@@ -40,5 +46,7 @@ as the images were originally intended for educational use.
 Author
 
 Alaleh Vazifehdoost, DVM
+
 Veterinary Researcher | AI in Diagnostic Imaging
+
 📧 alalehvd@gmail.com
