@@ -180,7 +180,7 @@ def fig_regional(img_uint8: np.ndarray):
     hist_b, _     = np.histogram(border.ravel(), bins=256, range=(0,255), density=True)
     centers = (edges[:-1] + edges[1:]) / 2.0
     fig, ax = plt.subplots(figsize=(7, 3.0))
-    ax.plot(centers, hist_c, lw=1.6, label="Center (proxy lungs)")
+    ax.plot(centers, hist_c, lw=1.6, label="Center region (thoracic field)")
     ax.plot(centers, hist_b, lw=1.0, linestyle="--", label="Borders")
     ax.set_xlabel("Pixel intensity (0–255)"); ax.set_ylabel("Density")
     ax.legend(); fig.tight_layout(); return fig
@@ -386,7 +386,7 @@ for upl in files:
             f"</div>", unsafe_allow_html=True
         )
 
-        with st.expander("Exposure Distribution Curves (Histogram + CDF)", expanded=True):
+        with st.expander("Exposure Distribution Curves", expanded=True):
             st.pyplot(fig_exposure_curves(img, EIp, EIT), use_container_width=True)
         with st.expander("Log-density histogram", expanded=False):
             st.pyplot(fig_log_hist(img), use_container_width=True)
@@ -452,3 +452,10 @@ csv = summary_df.to_csv(index=False).encode("utf-8")
 st.download_button("⬇️ Download predictions CSV", data=csv, file_name="qc_predictions.csv", mime="text/csv")
 
 st.caption("Note: EI/DI are proxies for PNGs.")
+st.info(
+    "These visualizations and measurements are approximate. "
+    "The central region is treated for the lung field, "
+    "without anatomical segmentation. "
+    "Models were trained on a limited open-source dataset, so results "
+    "should be interpreted as indicative rather than diagnostic."
+)
