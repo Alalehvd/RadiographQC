@@ -221,13 +221,13 @@ from PIL import Image
 EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
 
 def _fake_upload_from_path(path: str):
-    # Mimic an uploaded file object so the rest of the app works unchanged
-    with open(path, "rb") as f:
-        data = f.read()
-    return type("ExampleUpload", (), {
-        "name": os.path.basename(path),
-        "read": lambda d=data: d,
-    })()
+    class ExampleUpload:
+        def __init__(self, path):
+            self.name = os.path.basename(path)
+            self._data = open(path, "rb").read()
+        def read(self):
+            return self._data
+    return ExampleUpload(path)
 
 # 1️⃣ Load and display example images
 example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
