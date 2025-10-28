@@ -229,19 +229,21 @@ def _fake_upload_from_path(path: str):
             return self._data
     return ExampleUpload(path)
 
-# 1️⃣ Load and display example images
+# Load and display example images
 example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
 files = []
 
-st.markdown("### 🩻 Example Radiographs")
 if example_paths:
-    st.success(f"Loaded {len(example_paths)} example images. They are analyzed below automatically.")
-    cols = st.columns(min(3, len(example_paths)))
-    for i, p in enumerate(example_paths):
-        cols[i % len(cols)].image(Image.open(p), caption=os.path.basename(p), use_container_width=True)
+    st.info(f"{len(example_paths)} example radiographs loaded automatically from 'app/examples/'.")
+    for p in example_paths:
         files.append(_fake_upload_from_path(p))
 else:
     st.warning("No example images found in `app/examples/`. Add a few PNG files for the demo.")
+
+st.caption(
+    "These are example small-animal thoracic radiographs analyzed automatically at startup. "
+    "You can also upload your own images below."
+)
 
 st.caption(
     "These are sample small-animal thoracic radiographs included for demonstration. "
@@ -250,8 +252,8 @@ st.caption(
 
 st.markdown("---")
 
-# 2️⃣ Optional uploader (keeps only one uploader)
-st.markdown("### 📂 Upload additional radiographs (optional)")
+# Optional uploader (keeps only one uploader)
+st.markdown("### Upload Radiographs Here")
 uploads = st.file_uploader(
     "Upload PNG, JPG, or DICOM images",
     type=["png", "jpg", "jpeg", "dcm"],
@@ -260,7 +262,7 @@ uploads = st.file_uploader(
 if uploads:
     files.extend(uploads)
 
-# 3️⃣ Stop if nothing found
+# Stop if nothing found
 if not files:
     st.info("Please add example images to `app/examples/` or upload your own to begin.")
     st.stop()
