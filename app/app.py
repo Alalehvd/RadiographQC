@@ -33,6 +33,38 @@ DATASET_CSV = os.path.join("data", "dataset.csv")
 SUPPORTED = (".png", ".jpg", ".jpeg", ".dcm")
 CRITERION_COLS = {"positioning", "exposure", "collimation", "sharpness"}
 
+# ---------- Examples ----------
+
+EXAMPLES_DIR = os.path.join(os.path.dirname(__file__), "examples")
+
+st.markdown("### 📂 Upload your radiographs or use examples")
+
+mode = st.radio(
+    "Select input source:",
+    ["Upload my own files", "Use built-in example radiographs"],
+    horizontal=True
+)
+
+files = None
+if mode == "Upload my own files":
+    files = st.file_uploader(
+        "Upload one or more PNG, JPG, or DICOM images",
+        type=["png", "jpg", "jpeg", "dcm"],
+        accept_multiple_files=True
+    )
+else:
+    example_paths = sorted(glob.glob(os.path.join(EXAMPLES_DIR, "*.png")))
+    if not example_paths:
+        st.error("No example images found in /app/examples/")
+    else:
+        st.success(f"Loaded {len(example_paths)} example images.")
+        files = []
+        for path in example_paths:
+            with open(path, "rb") as f:
+                files.append(
+                    type("FakeUpload", (), {"name": os.path.basename(path), "read": lambda f=f: f.read()})
+                )
+
 # ---------- I/O ----------
 def read_image_any_bytes(name: str, byts: bytes) -> np.ndarray:
     ext = os.path.splitext(name)[1].lower()
