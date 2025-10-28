@@ -196,6 +196,9 @@ st.caption(
     "minimal post-processing, and standard exposure technique. "
     "Supports PNG, JPG formats."
 )
+st.caption("This demo model was trained on a limited subset of the "
+            "[Mendeley thoracic radiograph dataset](https://data.mendeley.com/datasets/ktx4cj55pn/1), "
+            "using manually annotated examples for exposure, positioning, collimation, and sharpness. ")
 st.caption("EI/DI shown here are relative intensity metrics estimated from the image itself. "
            "They are not the true detector Exposure Index or Deviation Index.")
 
@@ -410,9 +413,9 @@ for upl in files:
 
         st.markdown("### Quick summary")
         bullets = [
-            f"DI_proxy {DIp:+.2f} → {sugg}",
-            f"Dark-tail≤10: {feats['tail_le_10']:.3f}",
-            f"P25/P50: {feats['p25']:.1f}/{feats['p50']:.1f}",
+            # f"DI_proxy {DIp:+.2f} → {sugg}",
+            # f"Dark-tail≤10: {feats['tail_le_10']:.3f}",
+            # f"P25/P50: {feats['p25']:.1f}/{feats['p50']:.1f}",
         ]
         if exp_bundle:
             bullets.append(f"AI Exposure: **{'Good' if e_pred==1 else 'Poor'}** (p={e_prob:.2f}, thr={e_thr:.2f})")
