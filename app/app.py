@@ -195,7 +195,8 @@ st.caption(
     "For best results, upload images with the entire thorax visible, "
     "minimal post-processing, and standard exposure technique. "
     "Supports PNG, JPG formats."
-)st.caption("EI/DI shown here are relative intensity metrics estimated from the image itself. "
+)
+st.caption("EI/DI shown here are relative intensity metrics estimated from the image itself. "
            "They are not the true detector Exposure Index or Deviation Index.")
 
 st.sidebar.header("Models & Target")
@@ -382,11 +383,11 @@ for upl in files:
             f"</div>", unsafe_allow_html=True
         )
 
-        with st.expander("📊 Exposure curves (Histogram + CDF)", expanded=True):
+        with st.expander("Exposure curves (Histogram + CDF)", expanded=True):
             st.pyplot(fig_exposure_curves(img, EIp, EIT), use_container_width=True)
-        with st.expander("📈 Log-density histogram (tail visibility)", expanded=False):
+        with st.expander("Log-density histogram (tail visibility)", expanded=False):
             st.pyplot(fig_log_hist(img), use_container_width=True)
-        with st.expander("🗺️ Regional comparison (center vs borders)", expanded=False):
+        with st.expander("Regional comparison (center vs borders)", expanded=False):
             st.pyplot(fig_regional(img), use_container_width=True)
 
     with R:
